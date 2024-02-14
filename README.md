@@ -64,6 +64,18 @@ allow you to point at the location of your config file.
 
 If you use docker run, you'll need to set up a volume to point your config file at /config/config.yml
 
+
+## Some things that you might face 
+
+1. Maybe you won't be able to build this container. I found a working one at docker hub
+Check this out 
+https://hub.docker.com/r/kytro/gesturesensor
+
+2. If you build the app and run the container maybe you face app exceptions.
+Check double-take permissions and make sure your double-take configuration has the line: **reject_unauthorized: false**
+Thanks [kmelihk](https://github.com/kmelihk/) for the tip.
+
+
 ## Home Assistant Integration
 
 For my garage camera, I have integrated this with Home Assistant using an mqtt sensor. I configured this sensor in 
@@ -78,7 +90,7 @@ configuration.yaml like so:
             - topic: "gestures/availability"
           value_template: "{{ value_json.gesture }}"
           json_attributes_topic: "gestures/garage"
-          json_attributes_template: "{{ value }}" tojson }}"
+          json_attributes_template: "{{ value_json | tojson }}"
 
 This gives you a sensor with a value of the current gesture, and attributes of the current person and the current
 gesture. I then set up an automation that reacts to either of the attributes changing, and takes action if the current
